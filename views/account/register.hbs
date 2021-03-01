@@ -15,7 +15,7 @@
     <header class="sticky z-10 top-0 text-gray-700 bg-white border-t border-b body-font">
         <div class="container flex flex-col flex-wrap p-5 mx-auto md:items-center md:flex-row ">
             <a class="flex items-center w-40 font-medium text-gray-900 title-font md:mb-0">
-                <h1 class="text-2xl font-semibold tracking-tighter">UniAuth</h1>
+                <h1 class="text-2xl font-semibold tracking-tighter">{{project_name}}</h1>
             </a>
         </div>
     </header>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="p-1">
                         <input type="password" name="password" id="password" placeholder="Password"
-                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                            pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?.!@$%^&*-]).{8,}$"
                             title="Must contain at least one number and one uppercase and lowercase letter,and one special character ,and at least 6 or more characters"
                             class="w-full px-4 py-2 mt-2 text-base text-blue-700 bg-gray-100 border-transparent rounded-lg focus:border-gray-500 focus:bg-white focus:ring-0 "
                             autofocus required>

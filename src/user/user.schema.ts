@@ -1,14 +1,10 @@
 // import * as mongoose from 'mongoose';
-
-import * as mongoose from 'mongoose';
-
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { Application } from 'src/application/application.schema';
-import { Document } from 'mongoose';
+import { Application } from '../application/application.schema';
 
 export type UserDocument = User & Document;
-
 @Schema()
 export class User {
   constructor(partial: Partial<User>) {
@@ -67,7 +63,7 @@ export class User {
   profile: string[];
 
   /** Applications created by User */
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'User', required: true, default: [] })
+  @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'User', required: true, default: [] })
   authorizedApplications: Array<Application>;
 }
 

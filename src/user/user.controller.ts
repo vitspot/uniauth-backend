@@ -3,10 +3,8 @@ import {
   Get,
   Post,
   Body,
-  Put,
   Param,
   Delete,
-  Logger,
   UsePipes,
   ValidationPipe,
   UseGuards,
@@ -14,9 +12,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { AuthorizedUser } from './interface/user.interface';
 
 /**
@@ -35,7 +32,6 @@ import { AuthorizedUser } from './interface/user.interface';
 @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
-  private readonly logger = new Logger('user');
   constructor(private readonly userService: UserService) {}
 
   /**
@@ -47,16 +43,6 @@ export class UserController {
   @UsePipes(ValidationPipe)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
-  }
-
-  /**
-   * Responds to: _GET(`/`)_
-   *
-   * Lists all the users
-   */
-  @Get()
-  findAll() {
-    return this.userService.findAll();
   }
 
   /**
@@ -75,10 +61,6 @@ export class UserController {
    *
    * To update details of user
    */
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
 
   /**
    * Responds to: _DELETE(`/:id`)_

@@ -1,8 +1,7 @@
 import * as config from 'config';
 import * as cookieParser from 'cookie-parser';
-import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
-
+import * as hbs from 'hbs';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
@@ -21,9 +20,12 @@ async function bootstrap() {
   });
 
   /** configuring public and views directory */
-  app.useStaticAssets(join(__dirname, '..', 'public'));
-  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.useStaticAssets(join(__dirname, '../..', 'public'));
+  app.setBaseViewsDir(join(__dirname, '../..', 'views'));
+  hbs.registerPartials(join(__dirname, '../../views', 'partials'));
+
   app.setViewEngine('hbs');
+  console.log(__dirname);
 
   /** configuring swaggerUI */
   const options = new DocumentBuilder()

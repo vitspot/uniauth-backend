@@ -1,8 +1,8 @@
 import { JwtService } from '@nestjs/jwt';
-import { Body, Inject, Injectable, Logger, UnauthorizedException, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { newJWTConstants } from './constants/auth.constants';
 import { LoginDto } from './dto/login.dto';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { ObjectId } from 'mongoose';
 
 @Injectable()

@@ -13,10 +13,9 @@ import {
   NotFoundException,
   Logger,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { LoggedInUser } from 'src/auth/interface/loggedInUser.interface';
-import { AuthorizedUser } from 'src/user/interface/user.interface';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { LoggedInUser } from '../auth/interface/loggedInUser.interface';
+import { AuthorizedUser } from '../user/interface/user.interface';
 import { ApplicationService } from './application.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 

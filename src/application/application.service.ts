@@ -4,15 +4,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Application, ApplicationDocument } from './application.schema';
 import { isValidObjectId, Model } from 'mongoose';
 import { v4 as generateUUID } from 'uuid';
-import { User } from 'src/user/user.schema';
-import { LoggedInUser } from 'src/auth/interface/loggedInUser.interface';
+import { User, UserDocument } from '../user/user.schema';
+import { LoggedInUser } from '../auth/interface/loggedInUser.interface';
 
 @Injectable()
 export class ApplicationService {
   private readonly logger = new Logger('application');
 
-  // private readonly applicationRepository: UserRepository,
-  constructor(@InjectModel(Application.name) private applicationModel: Model<ApplicationDocument>) {}
+  constructor(
+    @InjectModel(Application.name) private applicationModel: Model<ApplicationDocument>,
+    @InjectModel('User') private userModel: Model<UserDocument>,
+  ) {}
 
   async create(createApplicationDto: CreateApplicationDto, authorizedUser: LoggedInUser): Promise<Application> {
     try {
@@ -34,8 +36,28 @@ export class ApplicationService {
     }
   }
 
+  async delete(id: string) {
+    try {
+      const AppUser = await this.applicationModel.findOne({ _id: id }).populate('participants', '_id');
+      AppUser.participants.forEach(async (user) => {
+        const User = await this.userModel.findById(user);
+        User.authorizedApplications = User.authorizedApplications.filter((_id) => _id.toString() !== id);
+        await User.save();
+      });
+      await this.applicationModel.findByIdAndDelete({ _id: id });
+    } catch (e) {
+      this.logger.error(e);
+      throw new ConflictException(e.message);
+    }
+  }
+
   findAll() {
     return this.applicationModel.find();
+  }
+
+  async findUsersGrantedAccess(id: string) {
+    const data = await this.applicationModel.findOne({ _id: id }).populate('participants', 'name collegeEmail');
+    return data;
   }
 
   async findOneById(id: string) {
@@ -60,7 +82,7 @@ export class ApplicationService {
 
   async pushUserIntoApplicationParticipantList(application: Application, user: User) {
     try {
-      const result = await this.applicationModel.findOneAndUpdate(
+      await this.applicationModel.findOneAndUpdate(
         { name: application.name },
         {
           $addToSet: { participants: user },
